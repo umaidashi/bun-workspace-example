@@ -1,5 +1,5 @@
 {
-	"name": "react",
+	"name": "react-app",
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
