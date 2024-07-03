@@ -4,14 +4,33 @@ import "./App.css";
 import reactLogo from "./assets/react.svg";
 import { client } from "./client";
 
+function useApi() {
+	const [message, setMessage] = useState("Loading...");
+
+	const fetchApi = async () => {
+		const res = await client.api.$post({
+			json: {
+				name: "hono",
+			},
+		});
+		const data = await res.json();
+		setMessage(data.message);
+	};
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	useEffect(() => {
+		fetchApi();
+	}, []);
+
+	return {
+		data: message,
+	};
+}
+
 function App() {
 	const [count, setCount] = useState(0);
 
-	// const res = await client.api.$get();
-	// if (res.ok) {
-	// 	const data = await res.json();
-	// 	console.log(data);
-	// }
+	const { data: message } = useApi();
 
 	return (
 		<>
@@ -35,27 +54,7 @@ function App() {
 			<p className="read-the-docs">
 				Click on the Vite and React logos to learn more
 			</p>
-			<Component />
-		</>
-	);
-}
-
-function Component() {
-	const [data, setData] = useState<string>("");
-	useEffect(() => {
-		async () => {
-			const res = await client.index.$get();
-			if (res.ok) {
-				const data = await res.text();
-				console.log(data);
-				setData(data);
-			}
-		};
-	});
-	return (
-		<>
-			<h1>Hello Hono!</h1>
-			<p>{data}</p>
+			<h1>{message}</h1>
 		</>
 	);
 }

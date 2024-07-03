@@ -1,4 +1,4 @@
 import { hc } from "hono/client";
 import type { AppType } from "server";
 
-export const client = hc<AppType>("localhost:8080");
+export const client = hc<AppType>("http://localhost:8080");
